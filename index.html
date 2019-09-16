@@ -15,8 +15,24 @@
       <h1><strong>Hogwarts</strong> <br />School of Witchcraft and Wizardry</h1>
     </header>
     <main>
-      <div id="interactions"></div>
+        <section>                    
+            <h2>List of students enrolled at Hogwarts in 1991</h2>
+                    <div class="interactive">
+                      <select>
+                        <option value="All">All</option>
+                        <option value="Gryffindor">Gryffindor</option>
+                        <option value="Slytherin">Slytherin</option>
+                        <option value="Hufflepuff">Hufflepuff</option>
+                        <option value="Ravenclaw">Ravenclaw</option>
+                        <option value="Expelled" id="optionExpelled"class="hide">Expelled</option>
+                      </select>
+                      <button id="fname">First Name</button>
+                      <button id="lname">Last Name</button>
+                      <button disabled id="reverse">Reverse</button>
+                  </div>
       <ul class="fulllist"></ul>
+    </section>
+
     </main>
 
 
@@ -36,9 +52,12 @@
         <h3 class="house"></h3>
 
         <h4 class="inquisitorial hide"></h4>
-        <h4 class="prefect hide"></h4>
         <h4 class="blood-status hide"></h4>
-        <h4 class="expelled hide">Expelled</h4>
+        <h3 class="prefected"></h3>
+        <h5 class="expelled hide">Expelled</h5>
+
+        <button id="expellButton">Expell</button>
+        <button id="prefectButton">Make Prefect</button>
       </article>
     </div>
 

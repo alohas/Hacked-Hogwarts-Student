@@ -37,3 +37,7 @@ h4 {
 #close:hover {
   color: firebrick;
 }
+
+div.wrap-crest > img {
+  max-width: 10%;
+}

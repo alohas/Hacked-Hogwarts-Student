@@ -3,9 +3,18 @@ const link = "https://petlatkea.dk/2019/hogwartsdata/students.json";
 const parent = document.querySelector("ul.fulllist");
 const modal = document.querySelector(".bg-modal");
 const modalbg = document.querySelector(".modal-content");
+const dropdown = document.querySelector("select");
 let primaryData = [];
 let usableData = [];
+let expelledData = [];
 let filteredData = [];
+
+let prefectCounter = {
+  Gryffindor: 0,
+  Slytherin: 0,
+  Hufflepuff: 0,
+  Ravenclaw: 0
+};
 
 const protoStudent = {
   firstname: "",
@@ -13,10 +22,18 @@ const protoStudent = {
   house: "",
   gender: "",
   nickname: "",
-  middlename: ""
+  middlename: "",
+  expelled: "",
+  prefect: ""
 };
 
 window.addEventListener("DOMContentLoaded", init(link));
+dropdown.addEventListener("change", filterOut);
+document.querySelector("#fname").addEventListener("click", sortByFirst);
+document.querySelector("#lname").addEventListener("click", sortByLast);
+document.querySelector("#reverse").addEventListener("click", reverseArray);
+document.querySelector("#expellButton").addEventListener("click", expell);
+document.querySelector("#prefectButton").addEventListener("click", prefect);
 
 document.addEventListener("click", function(e) {
   if (e.target.nodeName == "LI") {
@@ -78,7 +95,7 @@ function fixData(students) {
             studentJson.fullname
               .trim()
               .substring(
-                studentJson.fullname.trim().lastIndexOf(" "),
+                studentJson.fullname.trim().lastIndexOf(" ") + 1,
                 studentJson.fullname.trim().length
               )
           );
@@ -97,7 +114,7 @@ function fixData(students) {
       }
     } else {
       student.firstname = capitalize(studentJson.fullname.trim());
-      student.lastname = false;
+      student.lastname = "~Unknown~";
       student.nickname = false;
       student.middlename = false;
     }
@@ -119,7 +136,11 @@ function displayData(students) {
     let clone = template.cloneNode(true);
 
     clone.querySelector(".first-name").textContent = student.firstname;
-    clone.querySelector(".last-name").textContent = student.lastname;
+    if (student.lastname) {
+      clone.querySelector(".last-name").textContent = student.lastname;
+    } else {
+      clone.querySelector(".last-name").textContent = "~Unknown~";
+    }
     clone.querySelector(".house").textContent = student.house;
 
     clone.querySelector("li").setAttribute("id", student.firstname);
@@ -133,7 +154,15 @@ function popModal(studentName) {
     studentObject => studentObject.firstname === studentName
   )[0];
 
-  //console.log(filteredStudent);
+  document.querySelector("h5.expelled").classList.add("hide");
+  document.querySelector("#prefectButton").disabled = false;
+  document
+    .querySelector("#expellButton")
+    .setAttribute("value", filteredStudent.firstname);
+  document
+    .querySelector("#prefectButton")
+    .setAttribute("value", filteredStudent.firstname);
+
   modal.querySelector(".name").textContent =
     "First Name: " + filteredStudent.firstname;
 
@@ -189,12 +218,16 @@ function popModal(studentName) {
       filteredStudent.firstname.charAt(0).toLowerCase() +
       ".png";
   } else if (filteredStudent.lastname == "Patil") {
+    // ------------------------- FAKE - FIX TO CHECK FOR SAME LAST NAME ----------------------
     modal.querySelector(".wrap-profile > img").src =
       "images/" +
       filteredStudent.lastname.toLowerCase() +
       "_" +
       filteredStudent.firstname.toLowerCase() +
       ".png";
+    // ---------------------------------------------------------------------------------------
+  } else if (filteredStudent.lastname == "~Unknown~") {
+    modal.querySelector(".wrap-profile > img").classList.add("hide");
   } else {
     modal.querySelector(".wrap-profile > img").src =
       "images/" +
@@ -204,5 +237,111 @@ function popModal(studentName) {
       ".png";
   }
 
+  if (filteredStudent.expelled) {
+    document.querySelector("#expellButton").disabled = true;
+    document.querySelector("#prefectButton").disabled = true;
+    document.querySelector("h5.expelled").classList.remove("hide");
+  } else {
+    document.querySelector("#expellButton").disabled = false;
+  }
+  if (filteredStudent.prefect) {
+    document.querySelector("h3.prefected").textContent =
+      "Prefect of " + filteredStudent.house + " house";
+    document.querySelector("#prefectButton").disabled = true;
+  } else {
+    document.querySelector("h3.prefected").textContent = "";
+  }
+
+  if (prefectCounter.Slytherin >= 2) {
+    document.querySelector("#prefectButton").disabled = true;
+  } else if (prefectCounter.Gryffindor >= 2) {
+    document.querySelector("#prefectButton").disabled = true;
+  } else if (prefectCounter.Ravenclaw >= 2) {
+    document.querySelector("#prefectButton").disabled = true;
+  } else if (prefectCounter.Hufflepuff >= 2) {
+    document.querySelector("#prefectButton").disabled = true;
+  }
+
   modal.classList.remove("hide");
+}
+
+function filterOut() {
+  //console.log(dropdown.value);
+  if (dropdown.value == "All") {
+    filteredData = usableData;
+    displayData(filteredData);
+  } else if (dropdown.value == "Expelled") {
+    filteredData = usableData.filter(
+      studentObject => studentObject.expelled === true
+    );
+    displayData(filteredData);
+  } else {
+    filteredData = usableData.filter(
+      studentObject => studentObject.house === dropdown.value
+    );
+    displayData(filteredData);
+  }
+  document.querySelector("#reverse").disabled = true;
+}
+
+function sortByFirst() {
+  filteredData = filteredData.sort(function(a, b) {
+    return a.firstname.localeCompare(b.firstname);
+  });
+  displayData(filteredData);
+  document.querySelector("#reverse").disabled = false;
+}
+
+function sortByLast() {
+  filteredData = filteredData.sort(function(a, b) {
+    return a.lastname.localeCompare(b.lastname);
+  });
+  displayData(filteredData);
+  document.querySelector("#reverse").disabled = false;
+}
+
+function reverseArray() {
+  filteredData = filteredData.reverse();
+  displayData(filteredData);
+}
+
+function expell() {
+  //console.log(event.target.value);
+
+  for (let counter = 0; counter < usableData.length; counter++) {
+    if (usableData[counter].firstname === event.target.value) {
+      usableData[counter].expelled = true;
+      usableData[counter].prefect = false;
+      filteredData = usableData;
+      expelledData.push(usableData[counter]);
+    }
+  }
+  document.querySelector("h3.prefected").textContent = "";
+  document.querySelector("#optionExpelled").classList.remove("hide");
+  document.querySelector("#expellButton").disabled = true;
+  document.querySelector("#prefectButton").disabled = true;
+  document.querySelector("h5.expelled").classList.remove("hide");
+}
+
+function prefect() {
+  for (let counter = 0; counter < usableData.length; counter++) {
+    if (usableData[counter].firstname === event.target.value) {
+      usableData[counter].prefect = true;
+      filteredData = usableData;
+
+      document.querySelector("h3.prefected").textContent =
+        "Prefect of " + usableData[counter].house + " house";
+
+      if (usableData[counter].house == "Slytherin") {
+        prefectCounter.Slytherin++;
+      } else if (usableData[counter].house == "Gryffindor") {
+        prefectCounter.Gryffindor++;
+      } else if (usableData[counter].house == "Hufflepuff") {
+        prefectCounter.Hufflepuff++;
+      } else if (usableData[counter].house == "Ravenclaw") {
+        prefectCounter.Ravenclaw++;
+      }
+    }
+  }
+  document.querySelector("#prefectButton").disabled = true;
 }
