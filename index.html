@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Hogwarts: Student List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="head-img-wrap">
+        <img src="images/crest.png" alt="School-crest" />
+      </div>
+      <h1><strong>Hogwarts</strong> <br />School of Witchcraft and Wizardry</h1>
+    </header>
+    <main>
+      <div id="interactions"></div>
+      <ul class="fulllist"></ul>
+    </main>
+
+
+    <div class="bg-modal hide">
+      <article class="modal-content">
+        <button id="close">X</button>
+        <div class="wrap-crest">
+            <img src="" alt="crest-house">
+        </div>
+        <div class="wrap-profile">
+            <img src="" alt="profile-pic">
+        </div>
+        <h3 class="name"></h3>
+        <h3 class="lastname"></h3>
+        <h3 class="middlename"></h3>
+        <h3 class="nickname"></h3>
+        <h3 class="house"></h3>
+
+        <h4 class="inquisitorial hide"></h4>
+        <h4 class="prefect hide"></h4>
+        <h4 class="blood-status hide"></h4>
+        <h4 class="expelled hide">Expelled</h4>
+      </article>
+    </div>
+
+
+    <template id="myTemp">
+      <li class="student">
+          <h3 class="first-name"></h3>
+          <h3 class="last-name"></h3>
+          <h4 class="house"></h3>
+      </li>
+    </template>
+    <script src="script.js"></script>
+  </body>
+</html>

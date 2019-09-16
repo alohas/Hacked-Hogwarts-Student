@@ -1,0 +1,39 @@
+.hide {
+  display: none;
+}
+
+h3,
+h4 {
+  pointer-events: none;
+}
+
+.bg-modal {
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.modal-content {
+  max-height: 100%;
+  margin: 3em 2em;
+  background-color: bisque;
+  padding: 0 2em;
+  padding-bottom: 1em;
+}
+
+#close {
+  border: none;
+  background-color: initial;
+  cursor: pointer;
+  font-size: 30px;
+  color: black;
+}
+
+#close:hover {
+  color: firebrick;
+}
