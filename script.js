@@ -30,7 +30,8 @@ const protoStudent = {
   middlename: "",
   expelled: "",
   prefect: "",
-  bloodStatus: ""
+  bloodStatus: "",
+  inquisitorial: ""
 };
 
 window.addEventListener("DOMContentLoaded", init(link));
@@ -43,6 +44,12 @@ document.querySelector("#prefectButton").addEventListener("click", prefect);
 document
   .querySelector("#prefectRevokeButton")
   .addEventListener("click", revokePrefect);
+document
+  .querySelector("#inquisitorialButton")
+  .addEventListener("click", inquisitorialize);
+document
+  .querySelector("#inquisitorialRevokeButton")
+  .addEventListener("click", deInquisitorialize);
 
 document.addEventListener("click", function(e) {
   if (e.target.nodeName == "LI") {
@@ -71,11 +78,8 @@ function init(link) {
 }
 
 function fixData(students) {
-  //console.log(students);
   students.forEach(studentJson => {
     const student = Object.create(protoStudent);
-
-    //console.log(student);
 
     let endOfFirstName = studentJson.fullname.trim().indexOf(" ");
     student.firstname = capitalize(studentJson.house.trim());
@@ -146,7 +150,7 @@ function capitalize(name) {
 
 function displayData(students) {
   parent.innerHTML = "";
-  // console.log(students);
+  console.log(students);
   students.forEach(student => {
     let clone = template.cloneNode(true);
 
@@ -179,6 +183,15 @@ function popModal(studentName) {
     .setAttribute("value", filteredStudent.firstname);
   document
     .querySelector("#prefectRevokeButton")
+    .setAttribute("value", filteredStudent.firstname);
+  document
+    .querySelector("#inquisitorialButton")
+    .setAttribute("value", filteredStudent.firstname);
+
+  document.querySelector("#inquisitorialButton").disabled = true;
+
+  document
+    .querySelector("#inquisitorialRevokeButton")
     .setAttribute("value", filteredStudent.firstname);
 
   modal.querySelector(".name").textContent =
@@ -262,6 +275,7 @@ function popModal(studentName) {
   } else {
     document.querySelector("#expellButton").disabled = false;
   }
+
   if (filteredStudent.prefect) {
     document.querySelector("h3.prefected").textContent =
       "Prefect of " + filteredStudent.house + " house";
@@ -292,11 +306,30 @@ function popModal(studentName) {
       "Blood-Status: Unknown";
   }
 
+  if (filteredStudent.bloodStatus == "pure") {
+    document.querySelector("#inquisitorialButton").disabled = false;
+  } else if (filteredStudent.house == "Slytherin") {
+    document.querySelector("#inquisitorialButton").disabled = false;
+    console.log("yes");
+  }
+
+  if (filteredStudent.inquisitorial == true) {
+    document.querySelector("h3.inquisitorial").textContent =
+      "Member of Inquistorial Squad";
+    document.querySelector("#inquisitorialButton").classList.add("hide");
+    document
+      .querySelector("#inquisitorialRevokeButton")
+      .classList.remove("hide");
+  } else {
+    document.querySelector("h3.inquisitorial").textContent = "";
+    document.querySelector("#inquisitorialButton").classList.remove("hide");
+    document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
+  }
+
   modal.classList.remove("hide");
 }
 
 function filterOut() {
-  //console.log(dropdown.value);
   if (dropdown.value == "All") {
     filteredData = usableData;
     displayData(filteredData);
@@ -304,6 +337,7 @@ function filterOut() {
     filteredData = usableData.filter(
       studentObject => studentObject.expelled === true
     );
+    filteredData = expelledData;
     displayData(filteredData);
   } else {
     filteredData = usableData.filter(
@@ -334,23 +368,27 @@ function reverseArray() {
   filteredData = filteredData.reverse();
   displayData(filteredData);
 }
-//fix this
-function expell() {
-  //console.log(event.target.value);
 
+function expell() {
   for (let counter = 0; counter < usableData.length; counter++) {
     if (usableData[counter].firstname === event.target.value) {
       usableData[counter].expelled = true;
       usableData[counter].prefect = false;
-      filteredData = usableData;
+      usableData[counter].inquisitorial = false;
       expelledData.push(usableData[counter]);
+      usableData.splice(counter, 1);
+      filteredData = usableData;
     }
   }
   document.querySelector("h3.prefected").textContent = "";
+  document.querySelector("h3.inquisitorial").textContent = "";
   document.querySelector("#optionExpelled").classList.remove("hide");
   document.querySelector("#expellButton").disabled = true;
   document.querySelector("#prefectButton").disabled = true;
+  document.querySelector("#inquisitorialButton").disabled = true;
   document.querySelector("h5.expelled").classList.remove("hide");
+  modal.classList.add("hide");
+  displayData(filteredData);
 }
 
 function prefect() {
@@ -402,17 +440,38 @@ function revokePrefect() {
 
 function defineBloodStatus(BloodTypes) {
   for (let [key, value] of Object.entries(BloodTypes)) {
-    //console.log(value);
     for (let i = 0; i < value.length; i++) {
-      //console.log(value[i]);
       for (let j = 0; j < usableData.length; j++) {
         const lastname = usableData[j].lastname;
-        //console.log(value[i]);
         if (lastname.includes(value[i])) {
           usableData[j].bloodStatus = key;
         }
       }
     }
   }
-  console.log(usableData);
+}
+
+function inquisitorialize() {
+  for (let counter = 0; counter < usableData.length; counter++) {
+    if (usableData[counter].firstname === event.target.value) {
+      usableData[counter].inquisitorial = true;
+      filteredData = usableData;
+    }
+  }
+  document.querySelector("h3.inquisitorial").textContent =
+    "Member of Inquistorial Squad";
+  document.querySelector("#inquisitorialButton").classList.add("hide");
+  document.querySelector("#inquisitorialRevokeButton").classList.remove("hide");
+}
+
+function deInquisitorialize() {
+  for (let counter = 0; counter < usableData.length; counter++) {
+    if (usableData[counter].firstname === event.target.value) {
+      usableData[counter].inquisitorial = false;
+      filteredData = usableData;
+    }
+  }
+  document.querySelector("h3.inquisitorial").textContent = "";
+  document.querySelector("#inquisitorialButton").classList.remove("hide");
+  document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
 }
