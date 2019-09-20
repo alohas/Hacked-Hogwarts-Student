@@ -67,6 +67,7 @@ function init(link) {
     .then(data => {
       primaryData = data;
       fixData(data);
+      injectMyself();
       displayData(filteredData);
     });
 
@@ -151,6 +152,13 @@ function capitalize(name) {
 function displayData(students) {
   parent.innerHTML = "";
   console.log(students);
+  if (students.length == 1) {
+    document.querySelector(".listnaming").textContent =
+      "Showing " + students.length + " student";
+  } else {
+    document.querySelector(".listnaming").textContent =
+      "Showing " + students.length + " students";
+  }
   students.forEach(student => {
     let clone = template.cloneNode(true);
 
@@ -310,7 +318,6 @@ function popModal(studentName) {
     document.querySelector("#inquisitorialButton").disabled = false;
   } else if (filteredStudent.house == "Slytherin") {
     document.querySelector("#inquisitorialButton").disabled = false;
-    console.log("yes");
   }
 
   if (filteredStudent.inquisitorial == true) {
@@ -325,7 +332,7 @@ function popModal(studentName) {
     document.querySelector("#inquisitorialButton").classList.remove("hide");
     document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
   }
-
+  mixBlood(filteredStudent.firstname);
   modal.classList.remove("hide");
 }
 
@@ -371,7 +378,9 @@ function reverseArray() {
 
 function expell() {
   for (let counter = 0; counter < usableData.length; counter++) {
-    if (usableData[counter].firstname === event.target.value) {
+    if (usableData[counter].firstname === "Dominykas") {
+      alert("somethibng went wrong");
+    } else if (usableData[counter].firstname === event.target.value) {
       usableData[counter].expelled = true;
       usableData[counter].prefect = false;
       usableData[counter].inquisitorial = false;
@@ -452,16 +461,25 @@ function defineBloodStatus(BloodTypes) {
 }
 
 function inquisitorialize() {
+  let secondaryCntr;
   for (let counter = 0; counter < usableData.length; counter++) {
     if (usableData[counter].firstname === event.target.value) {
       usableData[counter].inquisitorial = true;
       filteredData = usableData;
+      secondaryCntr = counter;
     }
   }
   document.querySelector("h3.inquisitorial").textContent =
     "Member of Inquistorial Squad";
   document.querySelector("#inquisitorialButton").classList.add("hide");
   document.querySelector("#inquisitorialRevokeButton").classList.remove("hide");
+  setTimeout(function() {
+    usableData[secondaryCntr].inquisitorial = false;
+    filteredData = usableData;
+    document.querySelector("h3.inquisitorial").textContent = "";
+    document.querySelector("#inquisitorialButton").classList.remove("hide");
+    document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
+  }, 3000);
 }
 
 function deInquisitorialize() {
@@ -474,4 +492,33 @@ function deInquisitorialize() {
   document.querySelector("h3.inquisitorial").textContent = "";
   document.querySelector("#inquisitorialButton").classList.remove("hide");
   document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
+}
+
+function injectMyself() {
+  let me = Object.create(protoStudent);
+  me.firstname = "Dominykas";
+  me.lastname = "Kutka";
+  me.nickname = "VoLdEmOrT";
+  me.house = "Hufflepuff";
+  me.middlename = "CHEAP POTTER";
+
+  usableData.push(me);
+  filteredData = usableData;
+}
+
+function mixBlood(target) {
+  for (let counter = 0; counter < usableData.length; counter++) {
+    if (target == usableData[counter].firstname) {
+      if (usableData[counter].bloodStatus == "half") {
+        document.querySelector(".blood-status").textContent =
+          "Blood-Status: Pure";
+      } else if (usableData[counter].bloodStatus == "pure") {
+        document.querySelector(".blood-status").textContent =
+          "Blood-Status: Half";
+      } else if (usableData[counter].bloodStatus == false) {
+        document.querySelector(".blood-status").textContent =
+          "Blood-Status: Pure";
+      }
+    }
+  }
 }
