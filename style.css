@@ -2,8 +2,88 @@
   display: none;
 }
 
-h3,
-h4 {
+@font-face {
+  font-family: harrypotter;
+  src: url(HARRYP__.TTF);
+}
+
+@font-face {
+  font-family: inkpot;
+  src: url(Inkpot.ttf);
+}
+
+@font-face {
+  font-family: hogw;
+  src: url(Hogww___.ttf);
+}
+
+body {
+  background-color: #df8f3a;
+  background-image: url(images/light-paper-fibers.png);
+}
+
+.head-img-wrap img {
+  margin: 0 auto;
+  display: block;
+  max-width: 100%;
+}
+h1 {
+  font-family: harrypotter;
+  text-align: center;
+  margin-top: 0;
+}
+
+h2 {
+  font-family: hogw;
+}
+
+select,
+button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 5px 6px;
+  font-family: hogw;
+  cursor: pointer;
+  margin: 0 5px;
+  border-radius: 10px;
+}
+button:hover,
+select:hover {
+  background-color: white;
+  color: black;
+}
+
+button:disabled {
+  background-color: darkred;
+  cursor: default;
+  color: white;
+}
+ul {
+  list-style-image: url("images/icon.png");
+}
+li {
+  cursor: pointer;
+  margin: 10px;
+  font-family: inkpot;
+  border-bottom: solid black;
+  transition: 0.2s;
+}
+
+li:hover {
+  color: rgb(204, 31, 31);
+  border-bottom: solid rgb(204, 31, 31);
+  border-radius: 10px;
+}
+
+li h3.first-name,
+li h3.last-name {
+  display: inline;
+}
+li > h3.house {
+  margin-bottom: 10px;
+}
+li > h3 {
   pointer-events: none;
 }
 
@@ -20,18 +100,26 @@ h4 {
 
 .modal-content {
   max-height: 100%;
-  margin: 3em 2em;
-  background-color: bisque;
-  padding: 0 2em;
-  padding-bottom: 1em;
+  margin: 10% 10%;
+  padding: 1em 2em;
+  padding-top: 3em;
+  position: relative;
 }
 
 #close {
   border: none;
-  background-color: initial;
+  color: white;
+  background-color: darkred;
   cursor: pointer;
-  font-size: 30px;
-  color: black;
+  font-size: 20px;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
 }
 
 #close:hover {
@@ -39,5 +127,44 @@ h4 {
 }
 
 div.wrap-crest > img {
-  max-width: 10%;
+  max-width: 100%;
+}
+
+.modalImages {
+  display: grid;
+  grid-template-columns: 108px 108px;
+  grid-gap: 1em;
+}
+
+body > div > article > h3 {
+  margin: 17px 0;
+  font-family: inkpot;
+}
+
+.modal-inter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 10px;
+  grid-template-areas:
+    "expell prefect"
+    "inquisitorial inquisitorial";
+}
+#expellButton {
+  grid-area: expell;
+}
+
+#prefectButton {
+  grid-area: prefect;
+}
+
+#prefectRevokeButton {
+  grid-area: prefect;
+}
+
+#inquisitorialButton {
+  grid-area: inquisitorial;
+}
+
+#inquisitorialRevokeButton {
+  grid-area: inquisitorial;
 }

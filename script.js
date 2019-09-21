@@ -1,3 +1,4 @@
+"use strict";
 const template = document.querySelector("#myTemp").content;
 const link = "https://petlatkea.dk/2019/hogwartsdata/students.json";
 const ministerylink = "https://petlatkea.dk/2019/hogwartsdata/families.json";
@@ -34,6 +35,8 @@ const protoStudent = {
   inquisitorial: ""
 };
 
+//global event listeners
+
 window.addEventListener("DOMContentLoaded", init(link));
 dropdown.addEventListener("change", filterOut);
 document.querySelector("#fname").addEventListener("click", sortByFirst);
@@ -61,6 +64,8 @@ document.querySelector("#close").addEventListener("click", function() {
   modal.classList.add("hide");
 });
 
+//Init function that starts on DOMcontentloaded
+
 function init(link) {
   fetch(link)
     .then(e => e.json())
@@ -77,6 +82,8 @@ function init(link) {
       defineBloodStatus(data);
     });
 }
+
+//fixData - refurbishes all the data from json file to one Array of Objects for future use
 
 function fixData(students) {
   students.forEach(studentJson => {
@@ -145,9 +152,13 @@ function fixData(students) {
   filteredData = usableData;
 }
 
+//funtion to capitalize first letter and make small other ones
+
 function capitalize(name) {
   return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 }
+
+//function that displays the data from the given array in the website
 
 function displayData(students) {
   parent.innerHTML = "";
@@ -175,6 +186,8 @@ function displayData(students) {
     parent.appendChild(clone);
   });
 }
+
+//when a student is clicked, calls popMOdal which one opens a modal and populates it with data and other neccesary stuff
 
 function popModal(studentName) {
   let filteredStudent = filteredData.filter(
@@ -276,14 +289,6 @@ function popModal(studentName) {
       ".png";
   }
 
-  if (filteredStudent.expelled) {
-    document.querySelector("#expellButton").disabled = true;
-    document.querySelector("#prefectButton").disabled = true;
-    document.querySelector("h5.expelled").classList.remove("hide");
-  } else {
-    document.querySelector("#expellButton").disabled = false;
-  }
-
   if (filteredStudent.prefect) {
     document.querySelector("h3.prefected").textContent =
       "Prefect of " + filteredStudent.house + " house";
@@ -332,9 +337,21 @@ function popModal(studentName) {
     document.querySelector("#inquisitorialButton").classList.remove("hide");
     document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
   }
+
+  if (filteredStudent.expelled) {
+    document.querySelector("#expellButton").disabled = true;
+    document.querySelector("#prefectButton").disabled = true;
+    document.querySelector("h5.expelled").classList.remove("hide");
+    document.querySelector("#inquisitorialButton").disabled = true;
+  } else {
+    document.querySelector("#expellButton").disabled = false;
+  }
+
   mixBlood(filteredStudent.firstname);
   modal.classList.remove("hide");
 }
+
+//when a dropdown change is recorded, this functions takes event value and filters out array, then calls displayData giving that array
 
 function filterOut() {
   if (dropdown.value == "All") {
@@ -355,6 +372,8 @@ function filterOut() {
   document.querySelector("#reverse").disabled = true;
 }
 
+//when button is clicked sorts items in the array by FirstName and sends that array to display data
+
 function sortByFirst() {
   filteredData = filteredData.sort(function(a, b) {
     return a.firstname.localeCompare(b.firstname);
@@ -362,6 +381,8 @@ function sortByFirst() {
   displayData(filteredData);
   document.querySelector("#reverse").disabled = false;
 }
+
+//when button is clicked sorts items in the array by LastName and sends that array to display data
 
 function sortByLast() {
   filteredData = filteredData.sort(function(a, b) {
@@ -371,15 +392,18 @@ function sortByLast() {
   document.querySelector("#reverse").disabled = false;
 }
 
+//when button is clicked sorts items in the array by opposite way than before and sends that array to display data
+
 function reverseArray() {
   filteredData = filteredData.reverse();
   displayData(filteredData);
 }
 
+//function that is used to remove a student from All student array and adding it to the array of expelled students
+
 function expell() {
   for (let counter = 0; counter < usableData.length; counter++) {
     if (usableData[counter].firstname === "Dominykas") {
-      alert("somethibng went wrong");
     } else if (usableData[counter].firstname === event.target.value) {
       usableData[counter].expelled = true;
       usableData[counter].prefect = false;
@@ -389,16 +413,22 @@ function expell() {
       filteredData = usableData;
     }
   }
-  document.querySelector("h3.prefected").textContent = "";
-  document.querySelector("h3.inquisitorial").textContent = "";
-  document.querySelector("#optionExpelled").classList.remove("hide");
-  document.querySelector("#expellButton").disabled = true;
-  document.querySelector("#prefectButton").disabled = true;
-  document.querySelector("#inquisitorialButton").disabled = true;
-  document.querySelector("h5.expelled").classList.remove("hide");
-  modal.classList.add("hide");
-  displayData(filteredData);
+  if (event.target.value === "Dominykas") {
+    alert("Avada Kadabra");
+  } else {
+    document.querySelector("h3.prefected").textContent = "";
+    document.querySelector("h3.inquisitorial").textContent = "";
+    document.querySelector("#optionExpelled").classList.remove("hide");
+    document.querySelector("#expellButton").disabled = true;
+    document.querySelector("#prefectButton").disabled = true;
+    document.querySelector("#inquisitorialButton").disabled = true;
+    document.querySelector("h5.expelled").classList.remove("hide");
+    modal.classList.add("hide");
+    displayData(filteredData);
+  }
 }
+
+//function that makes a student a prefect and keeps track of prefects in each house
 
 function prefect() {
   for (let counter = 0; counter < usableData.length; counter++) {
@@ -424,6 +454,8 @@ function prefect() {
   document.querySelector("#prefectRevokeButton").classList.remove("hide");
 }
 
+//function that removes a student from prefects and keeps track of prefects in each house
+
 function revokePrefect() {
   for (let counter = 0; counter < usableData.length; counter++) {
     if (usableData[counter].firstname === event.target.value) {
@@ -447,6 +479,8 @@ function revokePrefect() {
   document.querySelector("#prefectRevokeButton").classList.add("hide");
 }
 
+//funtion that uses data from json to define blood status of each student
+
 function defineBloodStatus(BloodTypes) {
   for (let [key, value] of Object.entries(BloodTypes)) {
     for (let i = 0; i < value.length; i++) {
@@ -459,6 +493,8 @@ function defineBloodStatus(BloodTypes) {
     }
   }
 }
+
+//function that appoints a student to inquistorial squad
 
 function inquisitorialize() {
   let secondaryCntr;
@@ -482,6 +518,8 @@ function inquisitorialize() {
   }, 3000);
 }
 
+//function that removes a student from inquistorial squad
+
 function deInquisitorialize() {
   for (let counter = 0; counter < usableData.length; counter++) {
     if (usableData[counter].firstname === event.target.value) {
@@ -494,6 +532,8 @@ function deInquisitorialize() {
   document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
 }
 
+//function that adds me to the student array
+
 function injectMyself() {
   let me = Object.create(protoStudent);
   me.firstname = "Dominykas";
@@ -505,6 +545,8 @@ function injectMyself() {
   usableData.push(me);
   filteredData = usableData;
 }
+
+//function that displays the blood data of every student wrong way
 
 function mixBlood(target) {
   for (let counter = 0; counter < usableData.length; counter++) {
