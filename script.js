@@ -489,7 +489,7 @@ function defineBloodStatus(BloodTypes) {
     for (let i = 0; i < value.length; i++) {
       for (let j = 0; j < usableData.length; j++) {
         const lastname = usableData[j].lastname;
-        if (lastname.includes(value[i])) {
+        if (usableData[j].lastname === value[i]) {
           usableData[j].bloodStatus = key;
         }
       }

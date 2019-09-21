@@ -17,6 +17,11 @@
   src: url(Hogww___.ttf);
 }
 
+@font-face {
+  font-family: toxia;
+  src: url(Toxia.ttf);
+}
+
 body {
   background-color: #df8f3a;
   background-image: url(images/light-paper-fibers.png);
@@ -45,8 +50,8 @@ button {
   padding: 5px 6px;
   font-family: hogw;
   cursor: pointer;
-  margin: 0 5px;
-  border-radius: 10px;
+  margin: 0 2px;
+  border-radius: 20px 30px;
 }
 button:hover,
 select:hover {
@@ -100,9 +105,10 @@ li > h3 {
 
 .modal-content {
   max-height: 100%;
+  max-width: 100%;
   margin: 10% 10%;
   padding: 1em 2em;
-  padding-top: 3em;
+  padding-top: 2em;
   position: relative;
 }
 
@@ -136,12 +142,15 @@ div.wrap-crest > img {
   grid-gap: 1em;
 }
 
-body > div > article > h3 {
+.data > h3 {
   margin: 17px 0;
   font-family: inkpot;
 }
 
 .modal-inter {
+  padding: 10px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-row-gap: 10px;
@@ -149,6 +158,14 @@ body > div > article > h3 {
     "expell prefect"
     "inquisitorial inquisitorial";
 }
+h5 {
+  font-family: toxia;
+  font-size: 20px;
+  margin: 20px 0;
+  color: red;
+  transform: rotate(-5deg);
+}
+
 #expellButton {
   grid-area: expell;
 }
@@ -167,4 +184,33 @@ body > div > article > h3 {
 
 #inquisitorialRevokeButton {
   grid-area: inquisitorial;
+}
+
+@media only screen and (min-width: 1024px) {
+  main {
+    margin: 0 25%;
+  }
+
+  .modal-content {
+    margin: 10% 25%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "images details" "buttons details";
+    grid-column-gap: 10%;
+  }
+  .modalImages {
+    grid-area: images;
+    margin: 0 auto;
+  }
+  .modal-inter {
+    grid-area: buttons;
+  }
+  .data {
+    grid-area: details;
+    margin: 0 auto;
+  }
+  button,
+  select {
+    font-size: 15px;
+  }
 }
