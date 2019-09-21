@@ -417,7 +417,7 @@ function expell() {
     }
   }
   if (event.target.value === "Dominykas") {
-    alert("Avada Kadabra");
+    alert("Avada Kedavra");
   } else {
     document.querySelector("h3.prefected").textContent = "";
     document.querySelector("h3.inquisitorial").textContent = "";
@@ -518,6 +518,7 @@ function inquisitorialize() {
     document.querySelector("h3.inquisitorial").textContent = "";
     document.querySelector("#inquisitorialButton").classList.remove("hide");
     document.querySelector("#inquisitorialRevokeButton").classList.add("hide");
+    alert("whoopsie");
   }, 3000);
 }
 
