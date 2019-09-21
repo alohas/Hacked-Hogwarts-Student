@@ -269,6 +269,7 @@ function popModal(studentName) {
       "_" +
       filteredStudent.firstname.charAt(0).toLowerCase() +
       ".png";
+    modal.querySelector(".wrap-profile > img").classList.remove("hide");
   } else if (filteredStudent.lastname == "Patil") {
     // ------------------------- FAKE - FIX TO CHECK FOR SAME LAST NAME ----------------------
     modal.querySelector(".wrap-profile > img").src =
@@ -277,6 +278,7 @@ function popModal(studentName) {
       "_" +
       filteredStudent.firstname.toLowerCase() +
       ".png";
+    modal.querySelector(".wrap-profile > img").classList.remove("hide");
     // ---------------------------------------------------------------------------------------
   } else if (filteredStudent.lastname == "~Unknown~") {
     modal.querySelector(".wrap-profile > img").classList.add("hide");
@@ -287,6 +289,7 @@ function popModal(studentName) {
       "_" +
       filteredStudent.firstname.charAt(0).toLowerCase() +
       ".png";
+    modal.querySelector(".wrap-profile > img").classList.remove("hide");
   }
 
   if (filteredStudent.prefect) {
